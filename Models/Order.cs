@@ -14,8 +14,8 @@ namespace Linhkiendientu_aspnetmvc.Models
         public string Address { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime Finish { get; set; }
-       /* public int StaffId { get; set; }
-        public User Staff { get; set; }*/
+        public int StaffId { get; set; }
+        public User Staff { get; set; }
         public float ShipPrice { get; set; }
         public float TotalPrice { get; set; }
         public string Note { get; set; }
