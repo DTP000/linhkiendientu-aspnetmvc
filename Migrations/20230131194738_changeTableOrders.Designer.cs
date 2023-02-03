@@ -4,6 +4,7 @@ using Linhkiendientu_aspnetmvc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Linhkiendientu_aspnetmvc.Migrations
 {
     [DbContext(typeof(BanHangDbContext))]
-    partial class BanHangDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230131194738_changeTableOrders")]
+    partial class changeTableOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,12 +32,12 @@ namespace Linhkiendientu_aspnetmvc.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("Default")
+                        .HasColumnType("bit");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("bit");
 
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");

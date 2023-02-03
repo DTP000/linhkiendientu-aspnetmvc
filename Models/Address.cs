@@ -10,7 +10,7 @@ namespace Linhkiendientu_aspnetmvc.Models
         public string FullName { get; set; }
         public string Phone { get; set; }
         public string _Address { get; set; }
-        public bool Default { get; set; }
+        public bool IsDefault { get; set; }
         public IsDelete IsDelete { get; set; }
     }
 }
