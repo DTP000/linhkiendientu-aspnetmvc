@@ -32,6 +32,10 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                 name: "FK_Orders_Users_StaffId",
                 table: "Orders"
             );
+            migrationBuilder.DropColumn(
+                name: "StaffId",
+                table: "Orders"
+            );
         }
     }
 }
