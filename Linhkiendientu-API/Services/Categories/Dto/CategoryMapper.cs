@@ -8,11 +8,8 @@ namespace Linhkiendientu_API.Services.Categories.Dto
         public CategoryMapper()
         {
             CreateMap<Category, CategoryDto>();
-            CreateMap<List<Category>, List<CategoryDto>>();
-            CreateMap<CategoryDto, Category>();
             CreateMap<CreateCategoryDto, Category>();
             CreateMap<EditCategoryDto, Category>();
-
         }
     }
 }

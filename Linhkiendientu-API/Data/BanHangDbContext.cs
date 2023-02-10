@@ -9,7 +9,7 @@ namespace Linhkiendientu_API.Data
         public BanHangDbContext(DbContextOptions<BanHangDbContext> options) : base(options)
         {
         }
-        /*public DbSet<Address> Addresses { set; get; }*/
+        public DbSet<Address> Addresses { set; get; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryProduct> CategoryProducts { get; set; }
         public DbSet<ImageProduct> ImageProducts { get; set; }

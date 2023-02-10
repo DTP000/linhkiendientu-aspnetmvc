@@ -1,9 +1,10 @@
 using Linhkiendientu_API.Data;
-using Linhkiendientu_API.Services.Categories.Dto;
+using Linhkiendientu_API.Services.Categories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddAutoMapper((typeof(CategoryMapper).Assembly));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 // Add services to the container.
 builder.Services.AddDbContext<BanHangDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Linhkiendientu_API.Data;
 using TestThuVien.Entity;
+using Linhkiendientu_API.Services.Categories;
+using Linhkiendientu_API.Services.Categories.Dto;
 
 namespace Linhkiendientu_API.Controllers
 {
@@ -15,17 +17,21 @@ namespace Linhkiendientu_API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly BanHangDbContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(BanHangDbContext context)
+        public CategoriesController(
+            BanHangDbContext context,
+            ICategoryService categoryService)
         {
             _context = context;
+            _categoryService = categoryService;
         }
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            return await _categoryService.GetAll();
         }
 
         // GET: api/Categories/5

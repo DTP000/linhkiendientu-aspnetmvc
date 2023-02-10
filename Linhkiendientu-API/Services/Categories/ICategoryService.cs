@@ -5,7 +5,7 @@ namespace Linhkiendientu_API.Services.Categories
 {
     public interface ICategoryService
     {
-        IEnumerable<CategoryDto> GetAll();
+        Task<List<CategoryDto>> GetAll();
         CategoryDto GetById(int id);
         CreateCategoryDto Create(CreateCategoryDto model);
         int Update(EditCategoryDto model);
