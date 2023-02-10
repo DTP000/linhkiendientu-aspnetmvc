@@ -24,14 +24,16 @@ namespace Linhkiendientu_aspnetmvc.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             // Primary keys
+
+
 
             #region Foreign key CategoryProduct
 
             builder.Entity<CategoryProduct>().HasKey(q =>
                 new {
-                    q.CategoryId,
-                    q.ProductId
+                    q.Id
                 });
 
             #endregion
@@ -50,8 +52,7 @@ namespace Linhkiendientu_aspnetmvc.Data
 
             builder.Entity<OrderDetailIn>().HasKey(q =>
                 new {
-                    q.OrderInId,
-                    q.ProductId
+                    q.Id
                 });
 
             #endregion
@@ -60,8 +61,7 @@ namespace Linhkiendientu_aspnetmvc.Data
 
             builder.Entity<OrderDetail>().HasKey(q =>
                 new {
-                    q.OrderId,
-                    q.ProductId
+                    q.Id
                 });
 
             #endregion  

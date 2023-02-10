@@ -80,19 +80,24 @@ namespace Linhkiendientu_aspnetmvc.Migrations
 
             modelBuilder.Entity("Linhkiendientu_aspnetmvc.Models.CategoryProduct", b =>
                 {
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("IsDeleted")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoryId", "ProductId");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ProductId");
 
@@ -192,14 +197,11 @@ namespace Linhkiendientu_aspnetmvc.Migrations
 
             modelBuilder.Entity("Linhkiendientu_aspnetmvc.Models.OrderDetail", b =>
                 {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");
@@ -208,13 +210,21 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<float>("Price")
                         .HasColumnType("real");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -223,14 +233,11 @@ namespace Linhkiendientu_aspnetmvc.Migrations
 
             modelBuilder.Entity("Linhkiendientu_aspnetmvc.Models.OrderDetailIn", b =>
                 {
-                    b.Property<int>("OrderInId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");
@@ -239,13 +246,21 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrderInId")
+                        .HasColumnType("int");
+
                     b.Property<float>("Price")
                         .HasColumnType("real");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderInId", "ProductId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderInId");
 
                     b.HasIndex("ProductId");
 

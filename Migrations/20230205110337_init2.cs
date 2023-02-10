@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Linhkiendientu_aspnetmvc.Migrations
 {
-    public partial class init : Migration
+    public partial class init2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -85,14 +85,15 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                 name: "CategoryProducts",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoryProducts", x => new { x.CategoryId, x.ProductId });
+                    table.PrimaryKey("PK_CategoryProducts", x => x.Id);
                     table.ForeignKey(
                         name: "FK_CategoryProducts_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -138,7 +139,7 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     _Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Default = table.Column<bool>(type: "bit", nullable: false),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false),
                     IsDelete = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -160,7 +161,6 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SupplierId = table.Column<int>(type: "int", nullable: false),
                     StaffId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<float>(type: "real", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -176,8 +176,8 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderIns_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_OrderIns_Users_StaffId",
+                        column: x => x.StaffId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -197,6 +197,7 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Finish = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StaffId = table.Column<int>(type: "int", nullable: true),
                     ShipPrice = table.Column<float>(type: "real", nullable: false),
                     TotalPrice = table.Column<float>(type: "real", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -207,20 +208,25 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Orders_Users_StaffId",
+                        column: x => x.StaffId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Orders_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "OrderDetailIns",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OrderInId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -228,7 +234,7 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderDetailIns", x => new { x.OrderInId, x.ProductId });
+                    table.PrimaryKey("PK_OrderDetailIns", x => x.Id);
                     table.ForeignKey(
                         name: "FK_OrderDetailIns_OrderIns_OrderInId",
                         column: x => x.OrderInId,
@@ -247,9 +253,10 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                 name: "OrderDetails",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -257,7 +264,7 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderDetails", x => new { x.OrderId, x.ProductId });
+                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
                         name: "FK_OrderDetails_Orders_OrderId",
                         column: x => x.OrderId,
@@ -278,6 +285,11 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CategoryProducts_CategoryId",
+                table: "CategoryProducts",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CategoryProducts_ProductId",
                 table: "CategoryProducts",
                 column: "ProductId");
@@ -288,9 +300,19 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderDetailIns_OrderInId",
+                table: "OrderDetailIns",
+                column: "OrderInId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderDetailIns_ProductId",
                 table: "OrderDetailIns",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_OrderId",
+                table: "OrderDetails",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_ProductId",
@@ -298,14 +320,19 @@ namespace Linhkiendientu_aspnetmvc.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderIns_StaffId",
+                table: "OrderIns",
+                column: "StaffId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderIns_SupplierId",
                 table: "OrderIns",
                 column: "SupplierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderIns_UserId",
-                table: "OrderIns",
-                column: "UserId");
+                name: "IX_Orders_StaffId",
+                table: "Orders",
+                column: "StaffId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
