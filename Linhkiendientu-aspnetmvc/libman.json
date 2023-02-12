@@ -11,12 +11,31 @@
         "js/bootstrap.bundle.min.js.map",
         "js/bootstrap.bundle.min.js"
       ]
-    }
-  ,
+    },
     {
       "provider": "cdnjs",
       "library": "jquery@3.6.3",
       "destination": "wwwroot/assets/js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "admin-lte@3.2.0",
+      "destination": "wwwroot/lib/admin-lte/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "datatables@1.10.21",
+      "destination": "wwwroot/lib/datatables/"
     }
+  ,
+{
+  "provider": "cdnjs",
+  "library": "font-awesome@6.3.0",
+  "destination": "wwwroot/lib/font-awesome/",
+  "files": [
+    "css/all.min.css",
+    "css/all.css"
+  ]
+}
 ]
 }

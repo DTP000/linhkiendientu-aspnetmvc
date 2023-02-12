@@ -16,3 +16,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.nav-user-menu .user-image {
+    width: 20px;
+    margin-right: 4px;
+    margin-top: -4px;
+}
