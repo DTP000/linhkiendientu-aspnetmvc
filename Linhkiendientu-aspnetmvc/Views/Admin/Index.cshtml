@@ -3,6 +3,8 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/Admin/_Layout.cshtml";
 }
+
+
 <section class="content-header">
       <div class="container-fluid">
             <div class="row mb-2">
@@ -31,7 +33,6 @@
                         <table id="CategoryTable" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th></th>
                                     <th>Mã danh mục</th>
                                     <th>Tên danh mục</th>
                                     <th>Xóa</th>
@@ -46,3 +47,7 @@
         </div>
     </div>
 </section>
+@section Scripts
+    {
+    <script src="~/js/Category/Index.js" asp-append-version="true"></script>
+}
