@@ -9,6 +9,7 @@ using Linhkiendientu_API.Data;
 using TestThuVien.Entity;
 using Linhkiendientu_API.Services.Categories;
 using Linhkiendientu_API.Services.Categories.Dto;
+using Microsoft.AspNetCore.Cors;
 
 namespace Linhkiendientu_API.Controllers
 {
@@ -16,27 +17,23 @@ namespace Linhkiendientu_API.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly BanHangDbContext _context;
         private readonly ICategoryService _categoryService;
 
-        public CategoriesController(
-            BanHangDbContext context,
-            ICategoryService categoryService)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _context = context;
             _categoryService = categoryService;
         }
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories([FromQuery]PageAndSearch pageAndSearch)
+        public async Task<ActionResult<CategoryDtoView>> GetCategories([FromQuery]PageAndSearch pageAndSearch)
         {
-            return await _categoryService.GetAll(pageAndSearch).ConfigureAwait(false);
+           return  _categoryService.GetAll(pageAndSearch);
         }
 
         // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryDto>> GetCategory(int id)
+        public async Task<ActionResult<CategoryViewApiObject>> GetCategory(int id)
         {
             return _categoryService.GetById(id);
         }
@@ -44,7 +41,7 @@ namespace Linhkiendientu_API.Controllers
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<ActionResult<EditCategoryDto>> PutCategory(EditCategoryDto editCategory)
+        public async Task<ActionResult<CategoryViewApiObject>> PutCategory(EditCategoryDto editCategory)
         {
             return _categoryService.Update(editCategory);
         }
@@ -52,25 +49,16 @@ namespace Linhkiendientu_API.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CreateCategoryDto>> PostCategory(CreateCategoryDto createCategory)
+        public async Task<ActionResult<CategoryViewApiObject>> PostCategory(CreateCategoryDto createCategory)
         {
             return _categoryService.Create(createCategory);
         }
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<ActionResult<CategoryViewApiObject>> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return _categoryService.Delete(id) ? NoContent() : NotFound();
+            return _categoryService.Delete(id);
         }
     }
 }

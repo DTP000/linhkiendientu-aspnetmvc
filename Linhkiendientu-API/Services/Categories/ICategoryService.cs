@@ -5,10 +5,10 @@ namespace Linhkiendientu_API.Services.Categories
 {
     public interface ICategoryService
     {
-        Task<List<CategoryDto>> GetAll(PageAndSearch pageAndSearch);
-        CategoryDto GetById(int id);
-        CreateCategoryDto Create(CreateCategoryDto model);
-        EditCategoryDto Update(EditCategoryDto model);
-        bool Delete(int id);
+        CategoryDtoView GetAll(PageAndSearch pageAndSearch);
+        CategoryViewApiObject GetById(int id);
+        CategoryViewApiObject Create(CreateCategoryDto model);
+        CategoryViewApiObject Update(EditCategoryDto model);
+        CategoryViewApiObject Delete(int id);
     }
 }
