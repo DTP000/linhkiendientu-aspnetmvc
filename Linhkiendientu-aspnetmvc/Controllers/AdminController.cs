@@ -11,6 +11,9 @@ namespace Linhkiendientu_aspnetmvc.Controllers
             return View();
         }
 
-        
+        public ActionResult CategoriesIndex()
+        {
+            return View("Categories/Index");
+        }
     }
 }

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
 using System.Diagnostics;
+using RestSharp;
+using Newtonsoft.Json.Linq;
 
 namespace Linhkiendientu_aspnetmvc.Controllers
 {
@@ -13,9 +16,18 @@ namespace Linhkiendientu_aspnetmvc.Controllers
             _logger = logger;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var options = new RestClientOptions("https://localhost:7299")
+            {
+                MaxTimeout = -1,
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("/api/categories", RestSharp.Method.Get);
+            RestResponse response = await client.ExecuteAsync(request);
+            var objects = JArray.Parse(response.ToString());
+            var a = "a";
+            return View(objects);
         }
 
 
