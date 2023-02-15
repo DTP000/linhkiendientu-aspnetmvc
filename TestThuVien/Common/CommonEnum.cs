@@ -5,8 +5,8 @@ namespace TestThuVien.Entity.Common
 {
     public enum IsDelete
     {
-        NOT_DELETED = 1,
-        DELETED = 2
+        NOT_DELETED = 0,
+        DELETED = 1
     }
 
     public enum Role

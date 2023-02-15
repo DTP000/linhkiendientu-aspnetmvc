@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Linhkiendientu_API.Data;
 using TestThuVien.Entity;
+using Linhkiendientu_API.Services.Categories;
+using Linhkiendientu_API.Services.Categories.Dto;
+using Microsoft.AspNetCore.Cors;
 
 namespace Linhkiendientu_API.Controllers
 {
@@ -14,95 +17,48 @@ namespace Linhkiendientu_API.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly BanHangDbContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(BanHangDbContext context)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _context = context;
+            _categoryService = categoryService;
         }
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<CategoryDtoView>> GetCategories([FromQuery]PageAndSearch pageAndSearch)
         {
-            return await _context.Categories.ToListAsync();
+           return  _categoryService.GetAll(pageAndSearch);
         }
 
         // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult<CategoryViewApiObject>> GetCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return category;
+            return _categoryService.GetById(id);
         }
 
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        public async Task<ActionResult<CategoryViewApiObject>> PutCategory(EditCategoryDto editCategory)
         {
-            if (id != category.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(category).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return _categoryService.Update(editCategory);
         }
 
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<ActionResult<CategoryViewApiObject>> PostCategory(CreateCategoryDto createCategory)
         {
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+            return _categoryService.Create(createCategory);
         }
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<ActionResult<CategoryViewApiObject>> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.Id == id);
+            return _categoryService.Delete(id);
         }
     }
 }
