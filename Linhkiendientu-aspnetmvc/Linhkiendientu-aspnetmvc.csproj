@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Linhkiendientu-API\Linhkiendientu-API.csproj" />
     <ProjectReference Include="..\TestThuVien\TestThuVien.csproj" />
   </ItemGroup>
 
