@@ -7,8 +7,8 @@ namespace Linhkiendientu_API.Services.Categories
     {
         CategoryDtoView GetAll(PageAndSearch pageAndSearch);
         CategoryViewApiObject GetById(int id);
-        CategoryViewApiObject Create(CreateCategoryDto model);
-        CategoryViewApiObject Update(EditCategoryDto model);
+        Task<CategoryViewApiObject> Create(CreateCategoryDto model);
+        Task<CategoryViewApiObject> Update(EditCategoryDto model);
         CategoryViewApiObject Delete(int id);
     }
 }

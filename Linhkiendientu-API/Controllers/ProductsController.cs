@@ -24,26 +24,26 @@ namespace Linhkiendientu_API.Controllers
             _productService = productService;
         }
 
-        // GET: api/Categories
+        // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<ProductDtoView>> GetProducts([FromQuery]PageAndSearch pageAndSearch)
         {
            return _productService.GetAll(pageAndSearch);
         }
 
-        // GET: api/Categories/5
+        // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductViewApiObject>> GetProduct(int id)
         {
             return _productService.GetById(id);
         }
 
-        // PUT: api/Categories/5
+        // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<ActionResult<ProductViewApiObject>> PutProduct(EditProductDto editProduct)
         {
-            return _productService.Update(editProduct);
+            return await _productService.Update(editProduct);
         }
 
         // POST: api/Categories
@@ -51,10 +51,10 @@ namespace Linhkiendientu_API.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductViewApiObject>> PostProduct(CreateProductDto createProduct)
         {
-            return _productService.Create(createProduct);
+            return await _productService.Create(createProduct);
         }
 
-        // DELETE: api/Categories/5
+        // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<ProductViewApiObject>> DeleteProduct(int id)
         {

@@ -49,7 +49,7 @@ namespace Linhkiendientu_API.Services.Products
             }
         }
 
-        public ProductViewApiObject Create(CreateProductDto input)
+        public async Task<ProductViewApiObject> Create(CreateProductDto input)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Linhkiendientu_API.Services.Products
                 var entity = _mapper.Map<CreateProductDto, Product>(input);
                 entity.IsDeleted = TestThuVien.Entity.Common.IsDelete.NOT_DELETED;
                 _context.Products.Add(entity);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 var dto = _context.Products.FirstOrDefault(x=> x.Name == entity.Name);
                 var entityDto = _mapper.Map<Product, ProductDto>(dto);
                 return new ProductViewApiObject
@@ -85,11 +85,11 @@ namespace Linhkiendientu_API.Services.Products
                 };
             }
         }
-        public ProductViewApiObject Update(EditProductDto input)
+        public async Task<ProductViewApiObject> Update(EditProductDto input)
         {
             try
             {
-                var result = _context.Products.Any(x => x.Id == x.Id);
+                var result = _context.Products.Any(x => x.Id == input.Id && x.IsDeleted == TestThuVien.Entity.Common.IsDelete.NOT_DELETED);
                 if (!result)
                 {
                     return new ProductViewApiObject
@@ -101,7 +101,7 @@ namespace Linhkiendientu_API.Services.Products
                 }
                 var entity = _mapper.Map<EditProductDto, Product>(input);
                 _context.Products.Update(entity);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 var dto = _context.Products.FirstOrDefault(x => x.Name == entity.Name);
                 var entityDto = _mapper.Map<Product, ProductDto>(dto);
                 return new ProductViewApiObject
@@ -125,7 +125,7 @@ namespace Linhkiendientu_API.Services.Products
         {
             try
             {
-                var entity = _context.Products.Find(id);
+                var entity = _context.Products.Where(x => x.IsDeleted == TestThuVien.Entity.Common.IsDelete.NOT_DELETED && x.Id == id).FirstOrDefault();
                 if (entity == null)
                 {
                     return new ProductViewApiObject
