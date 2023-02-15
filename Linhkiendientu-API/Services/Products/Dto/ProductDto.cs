@@ -14,6 +14,5 @@ namespace Linhkiendientu_API.Services.Products.Dto
         public string LongDesc { get; set; }
         public string Image { get; set; }
         public string Url { get; set; }
-        public IsDelete IsDeleted { get; set; }
     }
 }

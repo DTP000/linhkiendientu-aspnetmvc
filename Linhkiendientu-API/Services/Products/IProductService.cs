@@ -7,8 +7,8 @@ namespace Linhkiendientu_API.Services.Products
     {
         ProductDtoView GetAll(PageAndSearch pageAndSearch);
         ProductViewApiObject GetById(int id);
-        ProductViewApiObject Create(CreateProductDto model);
-        ProductViewApiObject Update(EditProductDto model);
+        Task<ProductViewApiObject> Create(CreateProductDto model);
+        Task<ProductViewApiObject> Update(EditProductDto model);
         ProductViewApiObject Delete(int id);
     }
 }

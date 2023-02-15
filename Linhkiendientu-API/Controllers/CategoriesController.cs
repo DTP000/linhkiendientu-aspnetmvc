@@ -43,7 +43,7 @@ namespace Linhkiendientu_API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<CategoryViewApiObject>> PutCategory(EditCategoryDto editCategory)
         {
-            return _categoryService.Update(editCategory);
+            return await _categoryService.Update(editCategory);
         }
 
         // POST: api/Categories
@@ -51,7 +51,7 @@ namespace Linhkiendientu_API.Controllers
         [HttpPost]
         public async Task<ActionResult<CategoryViewApiObject>> PostCategory(CreateCategoryDto createCategory)
         {
-            return _categoryService.Create(createCategory);
+            return await _categoryService.Create(createCategory);
         }
 
         // DELETE: api/Categories/5

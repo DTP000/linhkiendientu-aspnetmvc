@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Linhkiendientu_API.Data;
 using Linhkiendientu_API.Services.Categories.Dto;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 using TestThuVien.Entity;
 
 namespace Linhkiendientu_API.Services.Categories
@@ -48,7 +50,7 @@ namespace Linhkiendientu_API.Services.Categories
             }
         }
 
-        public CategoryViewApiObject Create(CreateCategoryDto input)
+        public async Task<CategoryViewApiObject> Create(CreateCategoryDto input)
         {
             try
             {
@@ -65,7 +67,7 @@ namespace Linhkiendientu_API.Services.Categories
                 var entity = _mapper.Map<CreateCategoryDto, Category>(input);
                 entity.IsDeleted = TestThuVien.Entity.Common.IsDelete.NOT_DELETED;
                 _context.Categories.Add(entity);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 var dto = _context.Categories.FirstOrDefault(x=> x.Name == entity.Name);
                 var entityDto = _mapper.Map<Category, CategoryDto>(dto);
                 return new CategoryViewApiObject
@@ -84,11 +86,11 @@ namespace Linhkiendientu_API.Services.Categories
                 };
             }
         }
-        public CategoryViewApiObject Update(EditCategoryDto input)
+        public async Task<CategoryViewApiObject> Update(EditCategoryDto input)
         {
             try
             {
-                var result = _context.Categories.Any(x => x.Id == x.Id);
+                var result = _context.Categories.Any(x => x.Id == input.Id && x.IsDeleted == TestThuVien.Entity.Common.IsDelete.NOT_DELETED);
                 if (!result)
                 {
                     return new CategoryViewApiObject
@@ -100,7 +102,7 @@ namespace Linhkiendientu_API.Services.Categories
                 }
                 var entity = _mapper.Map<EditCategoryDto, Category>(input);
                 _context.Categories.Update(entity);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 var dto = _context.Categories.FirstOrDefault(x => x.Name == entity.Name);
                 var entityDto = _mapper.Map<Category, CategoryDto>(dto);
                 return new CategoryViewApiObject
@@ -124,7 +126,7 @@ namespace Linhkiendientu_API.Services.Categories
         {
             try
             {
-                var category = _context.Categories.Find(id);
+                var category = _context.Categories.Where(x => x.IsDeleted == TestThuVien.Entity.Common.IsDelete.NOT_DELETED && x.Id == id).FirstOrDefault();
                 if (category == null)
                 {
                     return new CategoryViewApiObject
