@@ -1,10 +1,13 @@
-﻿using Linhkiendientu_API.Data;
-using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
-using System.Diagnostics;
-using RestSharp;
-using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Linhkiendientu_API.Data;
+using TestThuVien.Entity;
+using Linhkiendientu_aspnetmvc.ViewModel;
 
 namespace Linhkiendientu_aspnetmvc.Controllers
 {
@@ -21,23 +24,52 @@ namespace Linhkiendientu_aspnetmvc.Controllers
         
         public async Task<IActionResult> Index()
         {
-            var options = new RestClientOptions("https://localhost:7299")
+            var products = _context.Products.Join(_context.CategoryProducts, p => p.Id, cp => cp.ProductId, (p, cp) => new { p, cp })
+                .Join(_context.Categories, pcp => pcp.cp.CategoryId, c => c.Id, (pcp, c) => new { pcp, c });
+            var list1 = await products.Where(e => e.c.Id == 1).Select(
+                    m => new ProductViewModel
+                    {
+                        Id = m.pcp.p.Id,
+                        Image = m.pcp.p.Image,
+                        NameP = m.pcp.p.Name,
+                        Price = m.pcp.p.Price
+                    }
+                ).ToListAsync();
+            var list2 = await products.Where(e => e.c.Id == 2).Select(
+                    m => new ProductViewModel
+                    {
+                        Id = m.pcp.p.Id,
+                        Image = m.pcp.p.Image,
+                        NameP = m.pcp.p.Name,
+                        Price = m.pcp.p.Price
+                    }
+                ).ToListAsync();
+            var list3 = await products.Where(e => e.c.Id == 3).Select(
+                    m => new ProductViewModel
+                    {
+                        Id = m.pcp.p.Id,
+                        Image = m.pcp.p.Image,
+                        NameP = m.pcp.p.Name,
+                        Price = m.pcp.p.Price
+                    }
+                ).ToListAsync();
+            var list4 = await products.Where(e => e.c.Id == 4).Select(
+                    m => new ProductViewModel
+                    {
+                        Id = m.pcp.p.Id,
+                        Image = m.pcp.p.Image,
+                        NameP = m.pcp.p.Name,
+                        Price = m.pcp.p.Price
+                    }
+                ).ToListAsync();
+            return View(new ProductCategory
             {
-                MaxTimeout = -1,
-            };
-            var client = new RestClient(options);
-            var request = new RestRequest("/api/categories", RestSharp.Method.Get);
-            RestResponse response = await client.ExecuteAsync(request);
-            var objects = JArray.Parse(response.ToString());
-            var a = "a";
-            return View(objects);
+                ListProductViewModel1 = list1,
+                ListProductViewModel2 = list2,
+                ListProductViewModel3 = list3,
+                ListProductViewModel4 = list4,
+            });
         }
 
-
-        /*        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-                public IActionResult Error()
-                {
-                    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-                }*/
     }
 }
