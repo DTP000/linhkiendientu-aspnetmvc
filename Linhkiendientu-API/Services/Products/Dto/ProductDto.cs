@@ -1,8 +1,10 @@
-﻿using Linhkiendientu_aspnetmvc.Models.Common;
+﻿using AutoMapper;
+using TestThuVien.Entity;
+using TestThuVien.Entity.Common;
 
-namespace Linhkiendientu_aspnetmvc.Models
+namespace Linhkiendientu_API.Services.Products.Dto
 {
-    public class Product
+    public class ProductDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -13,9 +15,5 @@ namespace Linhkiendientu_aspnetmvc.Models
         public string Image { get; set; }
         public string Url { get; set; }
         public IsDelete IsDeleted { get; set; }
-        public ICollection<CategoryProduct> CategoryProducts { get; set; }
-        public ICollection<ImageProduct> ImageProducts { get; set; }
-        public ICollection<OrderDetailIn> OrderDetailIns { get; set; }
-        public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
