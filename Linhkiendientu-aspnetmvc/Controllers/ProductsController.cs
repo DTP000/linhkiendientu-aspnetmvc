@@ -109,15 +109,16 @@ namespace Linhkiendientu_aspnetmvc.Controllers
             }
             return View(prd);
         }
-        [HttpGet("{q}")]
-        public async Task<IActionResult> Search(string? q)
+        [Route("Search")]
+        public async Task<IActionResult> Search(string q)
         {
-            if (q == null || _context.Products == null)
+            string query = q;
+            if (query == null || _context.Products == null)
             {
                 return NotFound();
             }
             var products = _context.Products;
-            var list1 = await products.Where(e => e.Name.Contains(q)).Take(20).Select(
+            var list1 = await products.Where(e => e.Name.Contains(query)).Take(20).Select(
                     m => new ProductViewModel
                     {
                         Id = m.Id,
@@ -129,7 +130,7 @@ namespace Linhkiendientu_aspnetmvc.Controllers
             return View(new ProductCategory
             {
                 ListProductViewModel1 = list1 ?? new List<ProductViewModel>(),
-                Category = "Tìm kiếm " + q ?? ""
+                Category = "Tìm kiếm " + query ?? ""
             });
         }
     }
