@@ -22,6 +22,7 @@ namespace Linhkiendientu_aspnetmvc.Controllers
         {
             return View();
         }
+        [Route("Card")]
         public async Task<IActionResult> Card()
         {
             return View();
