@@ -70,12 +70,22 @@ namespace Linhkiendientu_aspnetmvc.Controllers
                         Price = m.pcp.p.Price
                     }
                 ).ToListAsync();
-              return View(new ProductCategory
+            var list5 = await products.Where(e => e.c.Id == 5).Select(
+                    m => new ProductViewModel
+                    {
+                        Id = m.pcp.p.Id,
+                        Image = m.pcp.p.Image,
+                        NameP = m.pcp.p.Name,
+                        Price = m.pcp.p.Price
+                    }
+                ).ToListAsync();
+            return View(new ProductCategory
               {
                   ListProductViewModel1 = list1,
                   ListProductViewModel2 = list2,
                   ListProductViewModel3 = list3,
                   ListProductViewModel4 = list4,
+                  ListProductViewModel5 = list5,
               });
         }
 
@@ -86,15 +96,82 @@ namespace Linhkiendientu_aspnetmvc.Controllers
             {
                 return NotFound();
             }
+            
+            var product = _context.Products
+                .Join(_context.CategoryProducts, p => p.Id, cp => cp.ProductId, (p, cp) => new { p, cp })
+                .Join(_context.Categories, pcp => pcp.cp.CategoryId, c => c.Id, (pcp, c) => new { pcp, c })
+                .Join(_context.OrderDetailIns, podi => podi.pcp.p.Id, odi => odi.ProductId, (podi, odi) => new {podi, odi})
+                .Join(_context.OrderIns, pod => pod.odi.OrderInId, oi => oi.Id, (pod, oi) => new {pod, oi})
+                .Join(_context.Suppliers, ps => ps.oi.SupplierId, s => s.Id, (ps, s) => new {ps, s})
+                ;
+            var prd = await product.Where(e => e.ps.pod.podi.pcp.p.Id == id).Select(
+                    m => new ProductDetailViewModel
+                    {
+                        Id = m.ps.pod.podi.pcp.p.Id,
+                        Image = m.ps.pod.podi.pcp.p.Image,
+                        CategoryId = m.ps.pod.podi.c.Id,
+                        Category = m.ps.pod.podi.c.Name,
+                        SupplierId = m.s.Id,
+                        Supplier = m.s.Name,
+                        NameP = m.ps.pod.podi.pcp.p.Name,
+                        Price = m.ps.pod.podi.pcp.p.Price,
+                        Quantity = m.ps.pod.podi.pcp.p.Quantity,
+                        ShortDesc = m.ps.pod.podi.pcp.p.ShortDesc,
+                        LongDesc = m.ps.pod.podi.pcp.p.LongDesc,
+                    }
+                ).FirstOrDefaultAsync();
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var products = _context.Products.Join(_context.CategoryProducts, p => p.Id, cp => cp.ProductId, (p, cp) => new { p, cp })
+                .Join(_context.Categories, pcp => pcp.cp.CategoryId, c => c.Id, (pcp, c) => new { pcp, c });
+            var listPrdCateCDM = await products.Where(e => e.c.Id == prd.CategoryId).Select(
+                    m => new ProductViewModel
+                    {
+                        Id = m.pcp.p.Id,
+                        Image = m.pcp.p.Image,
+                        NameP = m.pcp.p.Name,
+                        Price = m.pcp.p.Price,
+                        Url = m.pcp.p.Url,
+                    }
+                ).ToListAsync();
+            var listPrdCateMV = await products.Where(e => e.c.Id == prd.CategoryId).Select(
+                    m => new ProductViewModel
+                    {
+                        Id = m.pcp.p.Id,
+                        Image = m.pcp.p.Image,
+                        NameP = m.pcp.p.Name,
+                        Price = m.pcp.p.Price,
+                        Url = m.pcp.p.Url,
+                    }
+                ).Take(5).ToListAsync();
+            var imgprd = await _context.ImageProducts.Where(x => x.ProductId == id).ToListAsync();
+            if (listPrdCateCDM == null)
+            {
+                prd.productViewModelsCungDanhMuc = new List<ProductViewModel>();
+            } else
+            {
+                prd.productViewModelsCungDanhMuc = listPrdCateCDM;
+            }
+            if (listPrdCateMV == null)
+            {
+                prd.productViewModelsMoiVe = new List<ProductViewModel>();
+            }
+            else
+            {
+                prd.productViewModelsMoiVe = listPrdCateMV;
+            }
+            if (imgprd == null)
+            {
+                prd.imageProducts = new List<ImageProduct>();
+            }
+            else
+            {
+                prd.imageProducts = imgprd;
+            }
+            if (prd == null)
             {
                 return NotFound();
             }
-
-            return View(product);
+            return View(prd);
         }
 
         // GET: Products/Create

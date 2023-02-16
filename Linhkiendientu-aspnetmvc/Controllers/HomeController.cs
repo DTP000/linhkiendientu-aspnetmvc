@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Linhkiendientu_API.Data;
 using TestThuVien.Entity;
 using Linhkiendientu_aspnetmvc.ViewModel;
+using System.Collections;
 
 namespace Linhkiendientu_aspnetmvc.Controllers
 {
@@ -32,34 +33,48 @@ namespace Linhkiendientu_aspnetmvc.Controllers
                         Id = m.pcp.p.Id,
                         Image = m.pcp.p.Image,
                         NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
+                        Price = m.pcp.p.Price,
+                        Url = m.pcp.p.Url,
                     }
                 ).ToListAsync();
-            var list2 = await products.Where(e => e.c.Id == 2).Select(
+            var list2 = await products.Where(e => e.c.Id == 15).Select(
                     m => new ProductViewModel
                     {
                         Id = m.pcp.p.Id,
                         Image = m.pcp.p.Image,
                         NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
+                        Price = m.pcp.p.Price,
+                        Url = m.pcp.p.Url,
                     }
                 ).ToListAsync();
-            var list3 = await products.Where(e => e.c.Id == 3).Select(
+            var list3 = await products.Where(e => e.c.Id == 16).Select(
                     m => new ProductViewModel
                     {
                         Id = m.pcp.p.Id,
                         Image = m.pcp.p.Image,
                         NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
+                        Price = m.pcp.p.Price,
+                        Url = m.pcp.p.Url,
                     }
                 ).ToListAsync();
-            var list4 = await products.Where(e => e.c.Id == 4).Select(
+            var list4 = await products.Where(e => e.c.Id == 17).Select(
                     m => new ProductViewModel
                     {
                         Id = m.pcp.p.Id,
                         Image = m.pcp.p.Image,
                         NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
+                        Price = m.pcp.p.Price,
+                        Url = m.pcp.p.Url,
+                    }
+                ).ToListAsync();
+            var list5 = await products.Where(e => e.c.Id == 7).Select(
+                    m => new ProductViewModel
+                    {
+                        Id = m.pcp.p.Id,
+                        Image = m.pcp.p.Image,
+                        NameP = m.pcp.p.Name,
+                        Price = m.pcp.p.Price,
+                        Url = m.pcp.p.Url,
                     }
                 ).ToListAsync();
             return View(new ProductCategory
@@ -68,6 +83,8 @@ namespace Linhkiendientu_aspnetmvc.Controllers
                 ListProductViewModel2 = list2,
                 ListProductViewModel3 = list3,
                 ListProductViewModel4 = list4,
+                ListProductViewModel5 = list5,
+
             });
         }
 

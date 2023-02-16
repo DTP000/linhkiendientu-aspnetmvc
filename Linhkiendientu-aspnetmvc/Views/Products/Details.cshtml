@@ -1,67 +1,487 @@
-﻿@model TestThuVien.Entity.Product
+﻿@using Linhkiendientu_aspnetmvc.ViewModel
+
+@model Linhkiendientu_aspnetmvc.ViewModel.ProductDetailViewModel
 
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+    ViewData["Title"] = Html.DisplayFor(model => model.NameP);
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ShortDesc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ShortDesc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LongDesc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LongDesc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Url)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Url)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-    </dl>
+@section linkCss{
+    <style>
+.owl-nav button {
+            position: absolute;
+            top: 50%;
+            transform: translate(0, -50%);
+            outline: none;
+            height: 25px;
+        }
+        
+        .owl-nav button svg {
+            width: 25px;
+            height: 25px;
+        }
+        
+        .owl-nav button.owl-prev {
+            left: 25px;
+        }
+        
+        .owl-nav button.owl-next {
+            right: 25px;
+        }
+        
+        .owl-nav button span {
+            font-size: 45px;
+        }
+        
+        .product-thumb .item img {
+            height: 100px;
+        }
+        .rte {
+			color: #000000;
+			border: solid 1px #e5e5e5;
+			border-top: none;
+			padding: 30px 45px 60px 30px;
+			font-size: 14px;
+			font-family: 'Arial',sans-serif;
+		}
+		.rte img {
+			width: 750px;
+			height: auto;
+		}
+</style>
+}
+<!-- breadcrumb -->
+<div class="bread-crumb">
+    <div class="container">
+        <div class="row">
+            <div class="mt-2" style="-bs-breadcrumb-divider: '&gt;&gt;';"
+                aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Trang chủ</li>
+                    <li class="breadcrumb-item">@Html.DisplayFor(model => model.Category)</li>
+                    <li class="breadcrumb-item active text-primary" aria-current="page">@Html.DisplayFor(model => model.NameP)</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<!-- end breadcrumb -->
+
+<!-- contents -->
+<div class="contents">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-9 col-md-12 col-sm-12 col-12">
+				<div class="row">
+					<div class="product-img col-12 col-sm-6 col-md-6 col-lg-6">
+						<div id="slider" class="owl-carousel product-slider">
+							@foreach (var item in Model.imageProducts)
+							{
+								<div class="item">
+									<a href="@Html.DisplayFor(modelItem => item.Url)">
+										<img class="img-fluid" src="@Html.DisplayFor(modelItem => item.Url)"
+										alt="@Html.DisplayFor(model => model.NameP)">
+									</a>
+								</div>
+							}
+                         </div>
+						<div id="thumb" class="owl-carousel product-thumb">
+							@foreach (var item in Model.imageProducts)
+							{
+								<div class="item">
+									<a href="#">
+										<img class="img-fluid" src="@Html.DisplayFor(modelItem => item.Url)"
+										 alt="@Html.DisplayFor(model => model.NameP)">
+									</a>
+								</div>
+							}
+                         </div>
+					</div>
+					<!-- end img left -->
+					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 product-info">
+						<h1 class="title-product text-primary">@Html.DisplayFor(model => model.NameP)</h1>
+						<div class="product-status">
+							<span class="status-title"> Thương hiệu: <span class="status-name text-primary">@Html.DisplayFor(model => model.Supplier)</span>
+							</span> <span> | </span> <span class="status-title"> Tình trạng:
+								<span class="status-name text-primary">Còn hàng</span>
+							</span>
+						</div>
+						<div class="product-review">
+							<span class="active"> <i class="fa fa-star-o"
+								aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i>
+							</span> <span class="active"> <i class="fa fa-star"
+								aria-hidden="true"></i> <i class="fa fa-star-o"
+								aria-hidden="true"></i>
+							</span> <span class="active"> <i class="fa fa-star"
+								aria-hidden="true"></i> <i class="fa fa-star-o"
+								aria-hidden="true"></i>
+							</span> <span class="deactive"> <i class="fa fa-star"
+								aria-hidden="true"></i> <i class="fa fa-star-o"
+								aria-hidden="true"></i>
+							</span> <span class="deactive"> <i class="fa fa-star"
+								aria-hidden="true"></i> <i class="fa fa-star-o"
+								aria-hidden="true"></i>
+							</span> <small class="text-secondary">(9 đánh giá)</small>
+						</div>
+						<div class="product-price">
+							<span>@Html.DisplayFor(model => model.Price)₫</span>
+						</div>
+						<div class="product-detail">
+							@Html.DisplayFor(model => model.ShortDesc)
+						</div>
+						<div class="product-form mt-3">
+							<form class="row" action="./addToCard" method="post">
+								<div class="col-auto">
+									<div class="input-number d-inline-block clearfix">
+										<button class="btn-num qtyminus"
+											type="button">-</button>
+										<input class="outline-none" type="text" id="qtym"
+											name="quantity" value="1"
+											class="form-control prd_quantity">
+                                        <button class="btn-num qtyplus"
+											type="button">+</button>
+									</div>
+								</div>
+								<div class="col-auto">
+									<div class="input-submit d-inline-block">
+										<input class="hidden" type="hidden" name="productID"
+											value="@Model.Id">
+										<button class="btn btn-buy bg-primary">
+											<span class="btn-img"> <img class="img-fliud"
+												src="~/assets/img/shopping_cart.png" alt="">
+											</span> <span class="btn-content text-white">Cho vào giỏ hàng</span>
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="contacts">
+							<span>Hotline: <a class="text-decoration-none fw-bold"
+								href="#">0865914142</a>
+							</span>
+						</div>
+						<div class="share-icon mt-2">
+							<span>Chia sẻ: <a class="icon" href="#"> <i
+									class="fa fa-facebook"></i>
+							</a> <a class="icon" href="#"> <i class="fa fa-twitter"></i>
+							</a> <a class="icon" href="#"> <i class="fa fa-pinterest"></i>
+							</a> <a class="icon" href="#"> <i class="fa fa-google-plus"></i>
+							</a>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="mt-5 product-detail border">
+					<div class="rte">
+						@Html.Raw(Model.LongDesc)
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+				<div class="right-contents mb-5">
+					<div class="dich-vu">
+						<ul class="list-group border border-primary">
+							<li class="list-group-item">
+								<div class="row align-items-center">
+									<div class="col-3">
+										<img class="img-icon-center img-fluid"
+											src="~/assets/img/shiper.png" alt="">
+									</div>
+									<div class="col-9">
+										<p class="text-primary fw-bold mb-0 py-0">Giao hàng tận
+											nơi</p>
+										<span class="text-secondary">Cam kết giao hàng tận nhà</span>
+									</div>
+								</div>
+							</li>
+							<li class="list-group-item">
+								<div class="row align-items-center">
+									<div class="col-3">
+										<img class="img-icon-center img-fluid"
+											src="~/assets/img/change.png" alt="">
+									</div>
+									<div class="col-9">
+										<p class="text-primary fw-bold mb-0 py-0">Đổi trả nhanh
+											chóng</p>
+										<span class="text-secondary">Đổi trả trong 7 ngày đầu
+											tiên</span>
+									</div>
+								</div>
+							</li>
+							<li class="list-group-item">
+								<div class="row align-items-center">
+									<div class="col-3">
+										<img class="img-icon-center img-fluid"
+											src="~/assets/img/pay.png" alt="">
+									</div>
+									<div class="col-9">
+										<p class="text-primary fw-bold mb-0 py-0">Bảo hành chính
+											hãng</p>
+										<span class="text-secondary">Cam kết 100% chính hãng</span>
+									</div>
+								</div>
+
+							</li>
+							<li class="list-group-item">
+								<div class="row align-items-center">
+									<div class="col-3">
+										<img class="img-icon-center img-fluid"
+											src="~/assets/img/phone.png" alt="">
+									</div>
+									<div class="col-9">
+										<p class="text-primary fw-bold mb-0 py-0">Đặt hàng online</p>
+										<span class="text-secondary">Gọi ngay 0975581779</span>
+									</div>
+								</div>
+							</li>
+							<li class="list-group-item">
+								<div class="row align-items-center">
+									<div class="col-3">
+										<img class="img-icon-center img-fluid"
+											src="~/assets/img/saving.png" alt="">
+									</div>
+									<div class="col-9">
+										<p class="text-primary fw-bold mb-0 py-0">Mua hàng tiết
+											kiệm</p>
+										<span class="text-secondary">Giảm giá ưu đãi tới hơn
+											50%</span>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="product-new mt-4">
+						<ul class="list-group">
+							<li class="list-group-item active">
+								<h2 class="mb-0 text-uppercase fs-6">Hàng mới về</h2>
+							</li>
+							@foreach (var item in Model.productViewModelsMoiVe){
+							<li class="list-group-item">
+								<div class="row">
+									<div class="col-md-5 my-2 img-product-new">
+										<img class="img-fluid"
+											 src="@Html.DisplayFor(modelItem => item.Image)" alt="@Html.DisplayFor(modelItem => item.NameP)">
+									</div>
+									<div class="col-md-7 my-2 info-product-new">
+										<h3 class="product-title">
+											<a class="text-decoration-none"
+											   href="Products/Details/@item.Id">@Html.DisplayFor(modelItem => item.NameP)</a>
+										</h3>
+										<div class="product-review">
+											<span class="active"> <i class="fa fa-star-o"
+												aria-hidden="true"></i> <i class="fa fa-star"
+												aria-hidden="true"></i>
+											</span> <span class="active"> <i class="fa fa-star"
+												aria-hidden="true"></i> <i class="fa fa-star-o"
+												aria-hidden="true"></i>
+											</span> <span class="active"> <i class="fa fa-star"
+												aria-hidden="true"></i> <i class="fa fa-star-o"
+												aria-hidden="true"></i>
+											</span> <span class="deactive"> <i class="fa fa-star"
+												aria-hidden="true"></i> <i class="fa fa-star-o"
+												aria-hidden="true"></i>
+											</span> <span class="deactive"> <i class="fa fa-star"
+												aria-hidden="true"></i> <i class="fa fa-star-o"
+												aria-hidden="true"></i>
+											</span>
+										</div>
+										<span class="price">@Html.DisplayFor(modelItem => item.Price)₫</span>
+									</div>
+								</div>
+							</li>
+						}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+<!-- end contents -->
+@functions
+{
+    void showCarousel(string name, string nameUnicode, List<ProductViewModel> prdList)
+    {
+	<!-- @name -->
+	<div id="@name" class="@name mt-5">
+					<div class="container-md">
+						<div class="row">
+							<div class="col ">
+								<div class="border">
+									<span class="icon_tags d-inline-block bg-primary p-3 text-white">
+										<i class="fa fa-tags" aria-hidden="true"></i>
+									</span>
+									<h2 class="title text-uppercase d-inline-block ms-3"><a href="./san-pham-moi">@nameUnicode</a></h2>
+									
+								</div>
+								
+								<div class="border-top-0 border">
+									
+									<div class="row">
+										<div class="owl-carousel owl-theme">
+										@foreach (var item in prdList)
+                                    {
+											<div class="item">
+												<div class="card h-100 product">
+														<a href="Products/Details/@item.Id" class="product-url">
+															<img src="@Html.DisplayFor(modelItem => item.Image)" alt="@Html.DisplayFor(modelItem => item.NameP)">
+													</a>
+													<div class="card-body product-info">
+														<h3 class="product-name text-truncate ">
+															<a class="text-decoration-none text-primary"
+													   	href="Products/Details/@item.Id">@Html.DisplayFor(modelItem => item.NameP)</a>
+														</h3>
+														<div class="product-price">
+															<span class="text-primary fw-bold">@Html.DisplayFor(modelItem => item.Price)₫</span>
+														</div>
+														<div class="review">
+															<span class="active"><i class="fa fa-star" aria-hidden="true"></i></span>
+															<span class="active"><i class="fa fa-star" aria-hidden="true"></i></span>
+															<span class="active"><i class="fa fa-star" aria-hidden="true"></i></span>
+															<span class="deactive"><i class="fa fa-star" aria-hidden="true"></i></span>
+															<span class="deactive"><i class="fa fa-star" aria-hidden="true"></i>
+															<small class="text-secondary">(9 đánh giá)</small></span>
+														</div>
+													</div>
+												</div>
+											</div>
+							}
+									 	</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+	</div>
+	<!-- end @name -->
+
+    }
+
+}
+@{
+    showCarousel("new-product", Model.Category, Model.productViewModelsCungDanhMuc);
+}
+@section Scripts
+    {
+    <script>
+        $(document).ready(function () {
+			var slider = $("#slider");
+    var thumb = $("#thumb");
+    var slidesPerPage = 4; //globaly define number of elements per page
+    var syncedSecondary = true;
+    slider.owlCarousel({
+        items: 1,
+        slideSpeed: 2000,
+        nav: false,
+        autoplay: false,
+        dots: false,
+        loop: true,
+        responsiveRefreshRate: 200
+    }).on('changed.owl.carousel', syncPosition);
+    thumb
+        .on(
+            'initialized.owl.carousel',
+            function() {
+                thumb.find(".owl-item").eq(0)
+                    .addClass("current");
+            })
+        .owlCarousel({
+            items: slidesPerPage,
+            dots: false,
+            nav: true,
+            item: 4,
+            smartSpeed: 200,
+            slideSpeed: 500,
+            slideBy: slidesPerPage,
+            navText: [
+                '<svg width="18px" height="18px" viewBox="0 0 11 20"><path style="fill:none;stroke-width: 1px;stroke: #000;" d="M9.554,1.001l-8.607,8.607l8.607,8.606"/></svg>',
+                '<svg width="25px" height="25px" viewBox="0 0 11 20" version="1.1"><path style="fill:none;stroke-width: 1px;stroke: #000;" d="M1.054,18.214l8.606,-8.606l-8.606,-8.607"/></svg>'
+            ],
+            responsiveRefreshRate: 100
+        }).on('changed.owl.carousel',
+            syncPosition2);
+
+    function syncPosition(el) {
+        var count = el.item.count - 1;
+        var current = Math.round(el.item.index -
+            (el.item.count / 2) - .5);
+        if (current < 0) {
+            current = count;
+        }
+        if (current > count) {
+            current = 0;
+        }
+        thumb.find(".owl-item").removeClass("current")
+            .eq(current).addClass("current");
+        var onscreen = thumb.find('.owl-item.active').length - 1;
+        var start = thumb.find('.owl-item.active')
+            .first().index();
+        var end = thumb.find('.owl-item.active').last()
+            .index();
+        if (current > end) {
+            thumb.data('owl.carousel').to(current, 100,
+                true);
+        }
+        if (current < start) {
+            thumb.data('owl.carousel').to(
+                current - onscreen, 100, true);
+        }
+    }
+
+    function syncPosition2(el) {
+        if (syncedSecondary) {
+            var number = el.item.index;
+            slider.data('owl.carousel').to(number, 100,
+                true);
+        }
+    }
+    thumb.on("click", ".owl-item", function(e) {
+        e.preventDefault();
+        var number = $(this).index();
+        slider.data('owl.carousel').to(number, 300,
+            true);
+    });
+
+    $(".qtyminus").on("click", function() {
+				var now = $("#qtym").val();
+        if ($.isNumeric(now)) {
+            if (parseInt(now) - 1 > 0) {
+                now--;
+            }
+					$("#qtym").val(now);
+        }
+    })
+    $(".qtyplus").on("click", function() {
+        var now = $("#qtym").val();
+        if ($.isNumeric(now)) {
+            $("#qtym").val(parseInt(now) + 1);
+        }
+    });
+            $('#new-product .owl-carousel').owlCarousel({
+                // loop:true,
+                margin: 0,
+                nav: true,
+                // items: 2,
+                mouseDrag: true,
+                touchDrag: true,
+                pullDrag: true,
+                dots: false,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    400: {
+                        items: 2
+                    },
+                    600: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 4
+                    }
+                }
+            });
+            
+        });
+    </script>
+}

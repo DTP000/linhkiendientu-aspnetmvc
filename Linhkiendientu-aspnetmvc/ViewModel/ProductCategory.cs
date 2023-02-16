@@ -6,5 +6,7 @@
         public List<ProductViewModel> ListProductViewModel2 { get; set; }
         public List<ProductViewModel> ListProductViewModel3 { get; set; }
         public List<ProductViewModel> ListProductViewModel4 { get; set; }
+        public List<ProductViewModel> ListProductViewModel5 { get; set; }
+
     }
 }

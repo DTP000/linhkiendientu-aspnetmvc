@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Image { get; set; }
         public string NameP { get; set; }
+        public string Url { get; set; }
         public float Price { get; set; }
     }
 }
