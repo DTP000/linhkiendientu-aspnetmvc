@@ -129,7 +129,6 @@
 							@Html.DisplayFor(model => model.ShortDesc)
 						</div>
 						<div class="product-form mt-3">
-							<form class="row" action="./addToCard" method="post">
 								<div class="col-auto">
 									<div class="input-number d-inline-block clearfix">
 										<button class="btn-num qtyminus"
@@ -152,7 +151,6 @@
 										</button>
 									</div>
 								</div>
-							</form>
 						</div>
 						<div class="contacts">
 							<span>Hotline: <a class="text-decoration-none fw-bold"
@@ -303,55 +301,55 @@
     {
 	<!-- @name -->
 	<div id="@name" class="@name mt-5">
-					<div class="container-md">
-						<div class="row">
-							<div class="col ">
-								<div class="border">
-									<span class="icon_tags d-inline-block bg-primary p-3 text-white">
-										<i class="fa fa-tags" aria-hidden="true"></i>
-									</span>
-									<h2 class="title text-uppercase d-inline-block ms-3"><a href="./san-pham-moi">@nameUnicode</a></h2>
-									
-								</div>
-								
-								<div class="border-top-0 border">
-									
-									<div class="row">
-										<div class="owl-carousel owl-theme">
-										@foreach (var item in prdList)
+																						<div class="container-md">
+																							<div class="row">
+																								<div class="col ">
+																									<div class="border">
+																										<span class="icon_tags d-inline-block bg-primary p-3 text-white">
+																											<i class="fa fa-tags" aria-hidden="true"></i>
+																										</span>
+																										<h2 class="title text-uppercase d-inline-block ms-3"><a href="./san-pham-moi">@nameUnicode</a></h2>
+																										
+																									</div>
+																									
+																									<div class="border-top-0 border">
+																										
+																										<div class="row">
+																											<div class="owl-carousel owl-theme">
+																											@foreach (var item in prdList)
                                     {
-											<div class="item">
-												<div class="card h-100 product">
-														<a href="Products/Details/@item.Id" class="product-url">
-															<img src="@Html.DisplayFor(modelItem => item.Image)" alt="@Html.DisplayFor(modelItem => item.NameP)">
-													</a>
-													<div class="card-body product-info">
-														<h3 class="product-name text-truncate ">
-															<a class="text-decoration-none text-primary"
-													   	href="Products/Details/@item.Id">@Html.DisplayFor(modelItem => item.NameP)</a>
-														</h3>
-														<div class="product-price">
-															<span class="text-primary fw-bold">@Html.DisplayFor(modelItem => item.Price)₫</span>
-														</div>
-														<div class="review">
-															<span class="active"><i class="fa fa-star" aria-hidden="true"></i></span>
-															<span class="active"><i class="fa fa-star" aria-hidden="true"></i></span>
-															<span class="active"><i class="fa fa-star" aria-hidden="true"></i></span>
-															<span class="deactive"><i class="fa fa-star" aria-hidden="true"></i></span>
-															<span class="deactive"><i class="fa fa-star" aria-hidden="true"></i>
-															<small class="text-secondary">(9 đánh giá)</small></span>
-														</div>
-													</div>
-												</div>
-											</div>
+																												<div class="item">
+																													<div class="card h-100 product">
+																															<a href="Products/Details/@item.Id" class="product-url">
+																																<img src="@Html.DisplayFor(modelItem => item.Image)" alt="@Html.DisplayFor(modelItem => item.NameP)">
+																														</a>
+																														<div class="card-body product-info">
+																															<h3 class="product-name text-truncate ">
+																																<a class="text-decoration-none text-primary"
+																														   	href="Products/Details/@item.Id">@Html.DisplayFor(modelItem => item.NameP)</a>
+																															</h3>
+																															<div class="product-price">
+																																<span class="text-primary fw-bold">@Html.DisplayFor(modelItem => item.Price)₫</span>
+																															</div>
+																															<div class="review">
+																																<span class="active"><i class="fa fa-star" aria-hidden="true"></i></span>
+																																<span class="active"><i class="fa fa-star" aria-hidden="true"></i></span>
+																																<span class="active"><i class="fa fa-star" aria-hidden="true"></i></span>
+																																<span class="deactive"><i class="fa fa-star" aria-hidden="true"></i></span>
+																																<span class="deactive"><i class="fa fa-star" aria-hidden="true"></i>
+																																<small class="text-secondary">(9 đánh giá)</small></span>
+																															</div>
+																														</div>
+																													</div>
+																												</div>
 							}
-									 	</div>
-									</div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
+																										 	</div>
+																										</div>
+																										
+																									</div>
+																								</div>
+																							</div>
+																						</div>
 	</div>
 	<!-- end @name -->
 
@@ -457,31 +455,63 @@
             $("#qtym").val(parseInt(now) + 1);
         }
     });
-            $('#new-product .owl-carousel').owlCarousel({
-                // loop:true,
-                margin: 0,
-                nav: true,
-                // items: 2,
-                mouseDrag: true,
-                touchDrag: true,
-                pullDrag: true,
-                dots: false,
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    400: {
-                        items: 2
-                    },
-                    600: {
-                        items: 3
-                    },
-                    1000: {
-                        items: 4
-                    }
+	$("button.btn-buy").on("click", function() {
+        addToCard();
+    });
+        $('#new-product .owl-carousel').owlCarousel({
+            // loop:true,
+            margin: 0,
+            nav: true,
+            // items: 2,
+            mouseDrag: true,
+            touchDrag: true,
+            pullDrag: true,
+            dots: false,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                400: {
+                    items: 2
+                },
+                600: {
+                    items: 3
+                },
+                1000: {
+                    items: 4
                 }
-            });
-            
+            }
         });
+            
+    });
+	function addToCard(){
+		dataCard = JSON.parse(localStorage.getItem('dataCard'));
+		let quantityPrd = document.getElementById('qtym').value;
+		let idPrd = document.querySelector('input[name=productID]').value;
+		let objPrd = {
+				idPrd: parseInt(idPrd),
+				quantityPrd: parseInt(quantityPrd),
+				issetPrd: false
+			};
+		if (!dataCard) dataCard = [];
+		dataCard.some(item => {
+			if (item.idPrd == objPrd.idPrd){
+				item.quantityPrd += objPrd.quantityPrd;
+					objPrd.issetPrd = true;
+			}
+		}, objPrd);
+		if(!objPrd.issetPrd){
+			dataCard.push({
+				idPrd: idPrd,
+				quantityPrd: quantityPrd,
+			});
+		}
+		localStorage.setItem('dataCard', JSON.stringify(dataCard));
+		let qtyCard = dataCard.length;
+		let nodeQtycard = document.querySelectorAll('span.qty-card');
+		nodeQtycard.forEach(item => {
+			item.innerText = qtyCard;
+		}, qtyCard);
+	}
     </script>
 }

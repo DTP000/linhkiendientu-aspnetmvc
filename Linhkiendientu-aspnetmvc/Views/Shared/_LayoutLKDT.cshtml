@@ -62,5 +62,16 @@
     <script src="~/assets/js/lib_dtp000.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            let dataCard = JSON.parse(localStorage.getItem('dataCard'));
+            if (!dataCard) dataCard = [];
+            let qtyCard = dataCard.length;
+            let nodeQtycard = document.querySelectorAll('span.qty-card');
+            nodeQtycard.forEach(item => {
+                item.innerText = qtyCard;
+            }, qtyCard);
+        });
+    </script>
 </body>
 </html>

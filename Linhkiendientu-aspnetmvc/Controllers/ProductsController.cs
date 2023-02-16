@@ -23,70 +23,24 @@ namespace Linhkiendientu_aspnetmvc.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            /*var products = await _context.Products.Join(_context.CategoryProducts, p =>p.Id, cp=> cp.ProductId, (p,cp) => new {p, cp})
-                .Join(_context.Categories, pcp => pcp.cp.CategoryId, c => c.Id, (pcp,c) => new {pcp,c}).Where(e => e.c.Id == 1).Select(
-                    m => new ProductViewModel {
-                        Id = m.pcp.p.Id,
-                        Image = m.pcp.p.Image,
-                        NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
-                    }
-                ).ToListAsync();*/
             var products = _context.Products.Join(_context.CategoryProducts, p => p.Id, cp => cp.ProductId, (p, cp) => new { p, cp })
                 .Join(_context.Categories, pcp => pcp.cp.CategoryId, c => c.Id, (pcp, c) => new { pcp, c });
-            var list1 = await products.Where(e => e.c.Id == 1).Select(
+            var list1 = await products.Where(e => e.c.Id == 2).Take(20).Select(
                     m => new ProductViewModel
                     {
                         Id = m.pcp.p.Id,
                         Image = m.pcp.p.Image,
                         NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
+                        Price = m.pcp.p.Price,
+                        Category = m.c.Name
                     }
                 ).ToListAsync();
-            var list2 = await products.Where(e => e.c.Id == 2).Select(
-                    m => new ProductViewModel
-                    {
-                        Id = m.pcp.p.Id,
-                        Image = m.pcp.p.Image,
-                        NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
-                    }
-                ).ToListAsync();
-            var list3 = await products.Where(e => e.c.Id == 3).Select(
-                    m => new ProductViewModel
-                    {
-                        Id = m.pcp.p.Id,
-                        Image = m.pcp.p.Image,
-                        NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
-                    }
-                ).ToListAsync();
-            var list4 = await products.Where(e => e.c.Id == 4).Select(
-                    m => new ProductViewModel
-                    {
-                        Id = m.pcp.p.Id,
-                        Image = m.pcp.p.Image,
-                        NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
-                    }
-                ).ToListAsync();
-            var list5 = await products.Where(e => e.c.Id == 5).Select(
-                    m => new ProductViewModel
-                    {
-                        Id = m.pcp.p.Id,
-                        Image = m.pcp.p.Image,
-                        NameP = m.pcp.p.Name,
-                        Price = m.pcp.p.Price
-                    }
-                ).ToListAsync();
+            var cate = await _context.Categories.Where(x => x.Id == 2).FirstOrDefaultAsync();
             return View(new ProductCategory
-              {
-                  ListProductViewModel1 = list1,
-                  ListProductViewModel2 = list2,
-                  ListProductViewModel3 = list3,
-                  ListProductViewModel4 = list4,
-                  ListProductViewModel5 = list5,
-              });
+            {
+                ListProductViewModel1 = list1 ?? new List<ProductViewModel>(),
+                Category = cate.Name ?? ""
+            });
         }
 
         // GET: Products/Details/5
@@ -144,149 +98,39 @@ namespace Linhkiendientu_aspnetmvc.Controllers
                     }
                 ).Take(5).ToListAsync();
             var imgprd = await _context.ImageProducts.Where(x => x.ProductId == id).ToListAsync();
-            if (listPrdCateCDM == null)
-            {
-                prd.productViewModelsCungDanhMuc = new List<ProductViewModel>();
-            } else
-            {
-                prd.productViewModelsCungDanhMuc = listPrdCateCDM;
-            }
-            if (listPrdCateMV == null)
-            {
-                prd.productViewModelsMoiVe = new List<ProductViewModel>();
-            }
-            else
-            {
-                prd.productViewModelsMoiVe = listPrdCateMV;
-            }
-            if (imgprd == null)
-            {
-                prd.imageProducts = new List<ImageProduct>();
-            }
-            else
-            {
-                prd.imageProducts = imgprd;
-            }
+            
+            prd.productViewModelsCungDanhMuc = listPrdCateCDM ?? new List<ProductViewModel>();
+            prd.productViewModelsMoiVe = listPrdCateMV ?? new List<ProductViewModel>();
+            prd.imageProducts = imgprd ?? new List<ImageProduct>();
+            
             if (prd == null)
             {
                 return NotFound();
             }
             return View(prd);
         }
-
-        // GET: Products/Create
-        public IActionResult Create()
+        [HttpGet("{q}")]
+        public async Task<IActionResult> Search(string? q)
         {
-            return View();
-        }
-
-        // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Quantity,ShortDesc,LongDesc,Image,Url,IsDeleted")] Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(product);
-        }
-
-        // GET: Products/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Products == null)
+            if (q == null || _context.Products == null)
             {
                 return NotFound();
             }
-
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return View(product);
-        }
-
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Quantity,ShortDesc,LongDesc,Image,Url,IsDeleted")] Product product)
-        {
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
+            var products = _context.Products;
+            var list1 = await products.Where(e => e.Name.Contains(q)).Take(20).Select(
+                    m => new ProductViewModel
                     {
-                        return NotFound();
+                        Id = m.Id,
+                        Image = m.Image,
+                        NameP = m.Name,
+                        Price = m.Price,
                     }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(product);
-        }
-
-        // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Products == null)
+                ).ToListAsync();
+            return View(new ProductCategory
             {
-                return NotFound();
-            }
-
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
-        }
-
-        // POST: Products/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Products == null)
-            {
-                return Problem("Entity set 'BanHangDbContext.Products'  is null.");
-            }
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductExists(int id)
-        {
-          return _context.Products.Any(e => e.Id == id);
+                ListProductViewModel1 = list1 ?? new List<ProductViewModel>(),
+                Category = "Tìm kiếm " + q ?? ""
+            });
         }
     }
 }
