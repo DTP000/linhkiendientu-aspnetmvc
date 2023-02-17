@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Linhkiendientu_API.Data;
 using TestThuVien.Entity;
+using Linhkiendientu_aspnetmvc.Areas.Admin.ViewModel;
 
 namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
 {
@@ -21,12 +22,22 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
         }
 
         // GET: Admin/Categories
-        public async Task<IActionResult> Index()
+        public ActionResult Index(string? Keyword)
         {
-              return View(await _context.Categories.ToListAsync());
+            var list = _context.Categories
+                    .Where(x => x.IsDeleted == TestThuVien.Entity.Common.IsDelete.NOT_DELETED).ToList();
+            if (!String.IsNullOrEmpty(Keyword))
+            {
+                list = list.Where(x => x.Name.ToLower().Contains(Keyword.ToLower())).ToList();
+            }
+            return View(list.Select(x => new CategoryVM
+              {
+                  Id = x.Id,
+                  Name = x.Name
+              }).ToList());
         }
 
-        // GET: Admin/Categories/Details/5
+        /*// GET: Admin/Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Categories == null)
@@ -42,7 +53,7 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
             }
 
             return View(category);
-        }
+        }*/
 
         // GET: Admin/Categories/Create
         public IActionResult Create()
@@ -55,15 +66,19 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,IsDeleted")] Category category)
+        public async Task<IActionResult> Create(CategoryCreate categoryCreate)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(new Category
+                {
+                    Name = categoryCreate.Name,
+                    IsDeleted = TestThuVien.Entity.Common.IsDelete.NOT_DELETED
+                });
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(categoryCreate);
         }
 
         // GET: Admin/Categories/Edit/5
@@ -79,7 +94,11 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(category);
+            return View(new CategoryVM
+            {
+                Id = category.Id,
+                Name = category.Name
+            });
         }
 
         // POST: Admin/Categories/Edit/5
@@ -87,9 +106,9 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,IsDeleted")] Category category)
+        public async Task<IActionResult> Edit(int id, CategoryVM categoryVm)
         {
-            if (id != category.Id)
+            if (id != categoryVm.Id)
             {
                 return NotFound();
             }
@@ -98,12 +117,13 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
             {
                 try
                 {
+                    Category category = new Category { Id = categoryVm.Id, Name = categoryVm.Name };
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!CategoryExists(categoryVm.Id))
                     {
                         return NotFound();
                     }
@@ -114,25 +134,24 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(categoryVm);
         }
 
         // GET: Admin/Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (_context.Categories == null)
             {
-                return NotFound();
+                return Problem("Entity set 'Categories'  is null.");
+            }
+            var category = await _context.Categories.FindAsync(id);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Admin/Categories/Delete/5

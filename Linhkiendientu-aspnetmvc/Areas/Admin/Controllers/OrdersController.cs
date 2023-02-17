@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Linhkiendientu_API.Data;
 using TestThuVien.Entity;
+using Linhkiendientu_API.Services.Orders.Dto;
 
 namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
 {
@@ -21,10 +22,29 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
         }
 
         // GET: Admin/Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? Keyword)
         {
-            var banHangDbContext = _context.Orders.Include(o => o.Staff).Include(o => o.User);
-            return View(await banHangDbContext.ToListAsync());
+            var banHangDbContext = _context.Orders.Include(o => o.Staff).ToList();
+            if (!String.IsNullOrEmpty(Keyword))
+            {
+                banHangDbContext = banHangDbContext.Where(x => x.FullName.ToLower().Contains(Keyword.ToLower()) || x.ShipCode.ToLower().Contains(Keyword.ToLower()) || x.Response.ToLower().Contains(Keyword.ToLower())).ToList();
+            }
+            return View(banHangDbContext.Select(x=> new OrderDto
+            {
+                Id = x.Id,
+                ShipUnit = x.ShipUnit,
+                ShipCode = x.ShipCode,
+                FullName = x.FullName,
+                Phone = x.Phone,
+                Address = x.Address,
+                CreateAt = x.CreateAt,
+                Finish = x.Finish,
+                ShipPrice = x.ShipPrice,
+                TotalPrice = x.TotalPrice,
+                Note = x.Note,
+                Response = x.Response,
+                OrderStatus = x.OrderStatus
+            }).ToList());
         }
 
         // GET: Admin/Orders/Details/5

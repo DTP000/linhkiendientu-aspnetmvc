@@ -1,114 +1,105 @@
-﻿@model IEnumerable<TestThuVien.Entity.Order>
-
+﻿@model IEnumerable<Linhkiendientu_aspnetmvc.Areas.Admin.ViewModel.OrderDto>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/Admin/_Layout.cshtml";
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShipUnit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShipCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreateAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Finish)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Staff)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShipPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Note)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Response)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderStatus)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Avatar)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShipUnit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Finish)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Staff.Avatar)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShipPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Note)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Response)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderStatus)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1>Danh sách đơn hàng</h1>
+            </div>
+            <div class="col-sm-6">
+                @*<a asp-action="Create" asp-controller="Products" asp-area="Admin" class="btn bg-green float-sm-right">
+                    <i class="fa fa-plus-square"></i>
+                    Thêm sản phẩm
+                </a>*@
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex justify-content-end">
+                                    <form asp-action="Index" asp-controller="Products" asp-area="Admin" method="get">
+                                        <label class="col-form-label"></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn bg-blue btn-search">
+                                                    <span class="fas fa-search" aria-hidden="true"></span>
+                                                </button>
+                                            </div>
+                                            <input type="text" name="Keyword" class="form-control txt-search" />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ShipCode)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FullName)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Phone)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.CreateAt)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ShipPrice)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Response)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                                <tr>
+                                                    <td>
+                                                @Html.DisplayFor(modelItem => item.ShipCode)
+                                                    </td>
+                                                    <td>
+                                                @Html.DisplayFor(modelItem => item.FullName)
+                                                    </td>
+                                                    <td>
+                                                @Html.DisplayFor(modelItem => item.Phone)
+                                                    </td>
+                                                    <td>
+                                                @Html.DisplayFor(modelItem => item.CreateAt)
+                                                    </td>
+                                                         <td>
+                                                @Html.DisplayFor(modelItem => item.ShipPrice)
+                                                        </td>
+                                                             <td>
+                                                @Html.DisplayFor(modelItem => item.Response)
+                                                        </td>
+                                                </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

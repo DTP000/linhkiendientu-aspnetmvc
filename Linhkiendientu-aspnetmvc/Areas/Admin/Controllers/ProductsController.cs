@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Linhkiendientu_API.Data;
 using TestThuVien.Entity;
+using Linhkiendientu_aspnetmvc.Areas.Admin.ViewModel;
 
 namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
 {
@@ -21,9 +22,24 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
         }
 
         // GET: Admin/Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? Keyword)
         {
-              return View(await _context.Products.ToListAsync());
+            var list = _context.Products
+                    .Where(x => x.IsDeleted == TestThuVien.Entity.Common.IsDelete.NOT_DELETED)
+                    .ToList();
+            if (!String.IsNullOrEmpty(Keyword))
+            {
+                list = list.Where(x => x.Name.ToLower().Contains(Keyword.ToLower()))
+                    .ToList();
+            }
+            return View(list.Select(x => new ProductDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Image = x.Image,
+                Price = x.Price,
+                Quantity = x.Quantity
+            }));
         }
 
         // GET: Admin/Products/Details/5
@@ -55,15 +71,24 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Quantity,ShortDesc,LongDesc,Image,Url,IsDeleted")] Product product)
+        public async Task<IActionResult> Create(CreateProductDto productCreate)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
+                _context.Add(new CreateProductDto
+                {
+                    Name = productCreate.Name,
+                    Quantity = productCreate.Quantity,
+                    Price = productCreate.Price,
+                    Image = "https://bizweb.dktcdn.net/thumb/medium/100/184/656/products/img-0078-ed45e27b-cab9-4392-bc29-4bc02cd3f2fc.jpg?v=1602313157000",
+                    LongDesc = "abc",
+                    ShortDesc = "abc",
+                    Url = "abc"
+                });
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(productCreate);
         }
 
         // GET: Admin/Products/Edit/5
@@ -79,7 +104,13 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(product);
+            return View(new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Quantity = product.Quantity,
+            });
         }
 
         // POST: Admin/Products/Edit/5
@@ -87,9 +118,9 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Quantity,ShortDesc,LongDesc,Image,Url,IsDeleted")] Product product)
+        public async Task<IActionResult> Edit(int id, ProductDto productVM)
         {
-            if (id != product.Id)
+            if (id != productVM.Id)
             {
                 return NotFound();
             }
@@ -98,12 +129,19 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
             {
                 try
                 {
+                    Product product = new Product
+                    {
+                        Id = productVM.Id,
+                        Name = productVM.Name,
+                        Quantity = productVM.Quantity,
+                        Price = productVM.Price
+                    };
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!ProductExists(productVM.Id))
                     {
                         return NotFound();
                     }
@@ -114,25 +152,24 @@ namespace Linhkiendientu_aspnetmvc.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(productVM);
         }
 
         // GET: Admin/Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Products == null)
+            if (_context.Products == null)
             {
-                return NotFound();
+                return Problem("Entity set 'BanHangDbContext.Products'  is null.");
+            }
+            var product = await _context.Products.FindAsync(id);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Admin/Products/Delete/5

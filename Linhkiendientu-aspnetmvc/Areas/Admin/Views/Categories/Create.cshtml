@@ -1,5 +1,5 @@
-﻿@model TestThuVien.Entity.Category
-
+﻿@model Linhkiendientu_aspnetmvc.Areas.Admin.ViewModel.CategoryCreate
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/Admin/_Layout.cshtml";
@@ -19,18 +19,13 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IsDeleted" class="control-label"></label>
-                <select asp-for="IsDeleted" class="form-control"></select>
-                <span asp-validation-for="IsDeleted" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Lưu" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" >Quay Lại Danh Sách</a>
 </div>
 

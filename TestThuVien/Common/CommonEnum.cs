@@ -26,11 +26,17 @@ namespace TestThuVien.Entity.Common
 
     public enum OrderStatus
     {
+        [Display(Name = "Chờ xác nhận")]
         CHO_XAC_NHAN = 1,
+        [Display(Name = "Chờ lấy hàng")]
         CHO_LAY_HANG = 2,
+        [Display(Name = "Đang giao")]
         DANG_GIAO = 3,
+        [Display(Name = "Đã giao")]
         DA_GIAO = 4,
+        [Display(Name = "Đã Hủy")]
         DA_HUY = 5,
+        [Display(Name = "Trả Hàng")]
         TRA_HANG = 6
     }
 }
